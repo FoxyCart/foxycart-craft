@@ -1,0 +1,87 @@
+{% extends "_layouts/cp" %}
+{% import "_includes/forms" as forms %}
+{% set title = "Customer"|t %}
+
+{% set customer = craft.foxyCart.getCustomer(customerId) %}
+{% set transactions = craft.foxyCart.getCustomerTransactions(customerId) %}
+
+{% set crumbs = [
+	{ label: "Customers"|t, url: url('foxycart/customers') }
+] %}
+
+{% if customer != false %}
+	{% set title = title~": "~customer.customer_first_name~" "~customer.customer_last_name %}
+{% endif %}
+
+{% set extraPageHeaderHtml %}
+	<a class="btn settings icon" href="{{ url('settings/plugins/foxycart') }}" title="{{ 'Settings'|t }}"></a>
+{% endset %}
+
+
+{% set selectedTab = 'customers' %}
+
+{% set tabs = {
+	transactions: { label: "Transactions"|t, url: url('foxycart') },
+	customers: { label: "Customers"|t, url: url('foxycart/customers') }
+} %}
+
+{% set content %}
+{% if currentUser.can('viewStoreInformation') %}
+	{% if not customer %}
+		<div class="pane">
+			<p>{{ "Sorry, we're unable to find that customer."|t }} <a href="{{ url('foxycart/customers') }}">{{ "Return to all customers."|t }}</a></p>
+		</div>
+	{% else %}
+		<dl class="fc">
+			<dt>Name</dt>
+			<dd>{{ customer.customer_first_name }} {{ customer.customer_last_name }}</dd>
+			{% if customer.customer_company is not empty %}
+				<dt>Company</dt>
+				<dd>{{ customer.customer_company }}</dd>
+			{% endif %}
+			<dt>Email</dt>
+			<dd>{{ customer.customer_email }}</dd>
+			<dt>Address</dt>
+			<dd>
+				{{ customer.customer_address1 }}<br/>
+				{% if customer.customer_address2 is not empty %}
+					{{ customer.customer_address2 }}<br/>
+				{% endif %}
+				{{ customer.customer_city }}, {{ customer.customer_state }}<br/>
+				{{ customer.customer_country }} {{ customer.customer_postal_code }}
+			</dd>
+			{% if customer.customer_phone is not empty %}
+				<dt>Phone</dt>
+				<dd>{{ customer.customer_phone }}</dd>
+			{% endif %}
+		</dl>
+
+		<hr/>
+
+		<h2>Transactions</h2>
+		<table class="data fullwidth">
+			<thead>
+				<th>ID</th>
+				<th>Order Total</th>
+				<th>Date</th>
+			</thead>
+		{% if transactions|length == 0 %}
+			<tr>
+				<td colspan="3" class="centeralign light">
+					{{ "No transactions yet for this customer"|t }}
+				</td>
+			</tr>
+		{% else %}
+			{% for transaction in transactions %}
+				<tr>
+					<td><a target="_blank" href="{{ transaction.receipt_url }}" class="go">{{ transaction.id }}</a></td>
+					<td>{{ transaction.order_total|currency('$') }}</td>
+					<td>{{ transaction.transaction_date|datetime }}</td>
+				</tr>
+			{% endfor %}
+		{% endif %}
+		</table>
+	{% endif %}
+{% endif %}
+
+{% endset %}

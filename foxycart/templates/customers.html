@@ -1,0 +1,55 @@
+{% extends "_layouts/cp" %}
+{% import "_includes/forms" as forms %}
+{% set title = "Customers"|t %}
+
+{% set extraPageHeaderHtml %}
+	<a class="btn settings icon" href="{{ url('settings/plugins/foxycart') }}" title="{{ 'FoxyCart Settings'|t }}"></a>
+{% endset %}
+
+{% set customers = craft.foxyCart.listCustomers %}
+
+{% set selectedTab = 'customers' %}
+
+{% set tabs = {
+	transactions: { label: "Transactions"|t, url: url('foxycart') },
+	customers: { label: "Customers"|t, url: url('foxycart/customers') }
+} %}
+
+{% set content %}
+{% if not craft.foxycart.isSetup %}
+<div class="pane">
+	<p>
+		{{ "You haven't set your store domain and/or API key for the FoxyCart plugin yet."|t }}
+		<a class="btn settings icon" href="{{ url('settings/plugins/foxycart') }}">{{ "Edit plugin settings"|t }}</a>
+	</p>
+</div>
+{% endif %}
+
+
+{% if currentUser.can('viewStoreInformation') %}
+	<table class="data fullwidth">
+		<thead>
+			<th>Name</th>
+			<th>Email</th>
+			<th>Country</th>
+			<th>Postcode</th>
+		</thead>
+	{% if customers|length == 0 %}
+		<tr>
+			<td colspan="4" class="centeralign light">
+				{{ "No customers yet for your store"|t }}
+			</td>
+		</tr>
+	{% else %}
+		{% for customer in customers %}
+			<tr>
+				<td><a href="{{ url('foxycart/customer/'~customer.customer_id) }}">{{ customer.customer_first_name }} {{ customer.customer_last_name }}</a></td>
+				<td>{{ customer.customer_email }}</td>
+				<td>{{ customer.customer_country }}</td>
+				<td>{{ customer.customer_postal_code }}</td>
+			</tr>
+		{% endfor %}
+	{% endif %}
+	</table>
+{% endif %}
+{% endset %}

@@ -1,0 +1,12 @@
+{% if options is not empty %}
+<select name="{{ name }}" id="{{ name }}">
+	{% for option in options %}
+		<option value="{{ option.value }}" {% if option.value == value %}selected{% endif %}>{{ option.label }}</option>
+	{% endfor %}
+</select>
+{% else %}
+<select name="{{ name }}" id="{{ name }}" disabled>
+		<option value="DEFAULT" selected>Default for all products</option>
+</select>
+<p class="icon" data-icon="alert"> Unable to fetch categories from FoxyCart. Ensure API key is correctly entered in plugin settings.</p>
+{% endif %}

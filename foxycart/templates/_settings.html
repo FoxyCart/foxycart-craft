@@ -1,0 +1,80 @@
+{% import '_includes/forms' as forms %}
+
+<p>Please enter the following details, as found from your stores FoxyCart administration within the settings and advanced pages.</p>
+
+{{ forms.textField({
+	label: 'Store Domain'|t,
+	required: true,
+	name: 'storedomain',
+	value: settings.storedomain,
+	placeholder: "mystore.foxycart.com",
+	instructions: 'Like yourstore.foxycart.com or secure.yourstore.com'|t,
+	errors: settings.getErrors('storedomain')
+}) }}
+
+{{ forms.textField({
+	label: 'API Key'|t,
+	required: true,
+	name: 'apikey',
+	value: settings.apikey,
+	instructions: 'As found on the "Advanced" page of your stores FoxyCart administration'|t,
+	errors: settings.getErrors('apikey')
+}) }}
+
+{{ forms.lightswitchField({
+	label: 'Enable SSO?'|t,
+	name: 'ssoEnabled',
+	on: (CraftEdition == CraftPro ? settings.ssoEnabled : false),
+	disabled: (CraftEdition < CraftPro),
+	instructions: (CraftEdition == CraftPro ? "Enable this setting to activate user syncronisation with FoxyCart's Single Sign-On functionality"|t : "Craft Pro is required to use this feature"|t),
+	onLabel: "Yes"|t,
+	offLabel: "No"|t,
+	toggle: 'ssoOptions'
+}) }}
+
+<div id="ssoOptions"{% if not settings.ssoEnabled %} class="hidden"{% endif %}>
+{% if CraftEdition == CraftPro %}
+	{{ forms.lightswitchField({
+		label: 'Require login before checkout?'|t,
+		name: 'ssoRequireLogin',
+		on: (CraftEdition == CraftPro ? settings.ssoRequireLogin : false),
+		instructions: "Enable this setting to require customers login on your website first before being allowed access to the checkout."|t,
+		onLabel: "Yes"|t,
+		offLabel: "No"|t
+	}) }}
+
+	{% set systemSettings = craft.systemSettings.users %}
+	{% set groups = [] %}
+	{% for group in craft.userGroups.getAllGroups() %}
+		{% set groups = groups|merge([{ label: group.name, value: group.id }]) %}
+	{% endfor %}
+
+	{{ forms.selectField({
+		label: "Default Customer Group"|t,
+		instructions: "Choose a user group that customers will be added to."|t,
+		name: 'ssoGroup',
+		options: groups,
+		value: (settings.ssoGroup != "") ?  settings.ssoGroup : systemSettings.defaultGroup
+	}) }}
+{% endif %}
+</div>
+
+<hr>
+
+<h2>Action URLs</h2>
+<table class="data" style="width:100%;">
+	<thead>
+		<th>{{ "Type"|t }}</th>
+		<th>{{ "URL"|t }}</th>
+	</thead>
+	<tr>
+		<td>{{ "Webhooks"|t }}</td>
+		<td><code>{{ siteUrl }}{{ craft.config.actionTrigger }}/foxyCart/webhook</code></td>
+	</tr>
+	{% if CraftEdition == CraftPro %}
+	<tr>
+		<td>{{ "SSO"|t }}</td>
+		<td>{% if settings.ssoEnabled %}<code>{{ siteUrl }}{{ craft.config.actionTrigger }}/foxyCart/sso</code>{% else %}Currently not enabled{% endif %}</td>
+	</tr>
+	{% endif %}
+</table>

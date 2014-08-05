@@ -1,0 +1,61 @@
+{% extends "_layouts/cp" %}
+{% import "_includes/forms" as forms %}
+{% set title = "Transactions"|t %}
+
+{% set extraPageHeaderHtml %}
+	<a class="btn settings icon" href="{{ url('settings/plugins/foxycart') }}" title="{{ 'FoxyCart Settings'|t }}"></a>
+{% endset %}
+
+{% set transactions = craft.foxyCart.listTransactions %}
+{% set selectedTab = 'transactions' %}
+
+{% set tabs = {
+	transactions: { label: "Transactions"|t, url: url('foxycart') },
+	customers: { label: "Customers"|t, url: url('foxycart/customers') }
+} %}
+
+{% set content %}
+{% if not craft.foxycart.isSetup %}
+<div class="pane">
+	<p>
+		{{ "You haven't set your store domain and/or API key for the FoxyCart plugin yet."|t }}
+		<a class="btn settings icon" href="{{ url('settings/plugins/foxycart') }}">{{ "Edit plugin settings"|t }}</a>
+	</p>
+</div>
+{% else %}
+	{% if craft.config.get('devMode') %}
+		<p class="subtle help">
+		  {{ "Displaying test transactions from your FoxyCart store because you're currently in Dev mode"|t }}
+		</p>
+	{% endif %}
+
+	{% if currentUser.can('viewStoreInformation') %}
+		<table class="data fullwidth">
+			<thead>
+				<th>ID</th>
+				<th>Customer</th>
+				<th>Email</th>
+				<th>Order Total</th>
+				<th>Date</th>
+			</thead>
+		{% if transactions|length == 0 %}
+			<tr>
+				<td colspan="5" class="centeralign light">
+					{{ "No transactions yet for your store"|t }}
+				</td>
+			</tr>
+		{% else %}
+			{% for transaction in transactions %}
+				<tr>
+					<td><a target="_blank" href="{{ transaction.receipt_url }}" class="go" title="{{ "View receipt"|t }}">{{ transaction.id }}</a></td>
+					<td>{% if transaction.is_anonymous == "0" %}<a target="_blank" href="{{ url('foxycart/customer/'~transaction.customer_id) }}" title="{{ "View Customer"|t }}">{% endif %}{{ transaction.customer_first_name }} {{ transaction.customer_last_name }}{% if transaction.is_anonymous == "0" %}</a>{% endif %}</td>
+					<td>{{ transaction.customer_email }}</td>
+					<td>{{ transaction.order_total|currency('$') }}</td>
+					<td>{{ transaction.transaction_date|datetime }}</td>
+				</tr>
+			{% endfor %}
+		{% endif %}
+		</table>
+	{% endif %}
+{% endif %}
+{% endset %}

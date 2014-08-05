@@ -1,0 +1,21 @@
+dl.fc {
+	margin-bottom:15px;
+	overflow:hidden;
+}
+dl.fc dt {
+	font-weight:bold;
+	width:80px;
+	float:left;
+	clear:left;
+}
+dl.fc dd {
+	float:left;
+	clear:right;
+}
+dl.fc dt, dl.fc dd {
+	margin-bottom:3px;
+}
+p.subtle {
+	font-style:italic;
+	color:#777;
+}
