@@ -12,14 +12,15 @@ This plugin adds in a number of FoxyCart features to Craft to make it easier for
 
 ## Requirements
 
- - Craft 2.1+
+ - [Craft](http://buildwithcraft.com) 2.1+
  - Craft Pro (For SSO)
- - FoxyCart 1.1+
+ - [FoxyCart](http://www.foxycart.com) 1.1+
 
 ## Installation
 
 1. Copy the folder into your Craft CMS plugins folder
-2. Edit the plugin settings to set your FoxyCart store domain and API key
+2. Navigate to the plugins section of the CP and install the FoxyCart plugin
+3. Edit the plugin settings to set your FoxyCart store domain and API key
 
 ## Usage
 
@@ -31,7 +32,7 @@ To enable HMAC encryption, simply wrap any links or forms (or your whole page if
 
 ### Events
 
-`foxyCart.onProcessWebhook`
+#### foxyCart.onProcessWebhook
 
 Raised whenever a webhook (transaction or subscription) is processed.
 
