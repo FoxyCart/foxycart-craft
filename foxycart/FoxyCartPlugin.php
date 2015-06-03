@@ -45,9 +45,11 @@ class FoxyCartPlugin extends BasePlugin
         }
 
         craft()->on('users.onSaveUser', function(Event $event) {
-            $customerId = craft()->foxyCart->updateFoxyCartCustomer($event->params['user']);
-            if ($customerId) {
-                craft()->foxyCart->saveCustomerId($event->params['user'], $customerId);
+            if (craft()->getEdition() == Craft::Pro) {
+                $customerId = craft()->foxyCart->updateFoxyCartCustomer($event->params['user']);
+                if ($customerId) {
+                    craft()->foxyCart->saveCustomerId($event->params['user'], $customerId);
+                }
             }
         });
     }
