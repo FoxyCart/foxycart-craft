@@ -14,9 +14,9 @@ class FoxyCartVariable
         return (!empty($settings->storedomain) && !empty($settings->apikey));
     }
 
-    public function listTransactions()
+    public function listTransactions($params = array())
     {
-        return craft()->foxyCart->listTransactions();
+        return craft()->foxyCart->listTransactions($params);
     }
 
     public function getTransaction($id)
@@ -24,9 +24,9 @@ class FoxyCartVariable
         return craft()->foxyCart->getTransaction($id);
     }
 
-    public function listCustomers()
+    public function listCustomers($params = array())
     {
-        return craft()->foxyCart->listCustomers();
+        return craft()->foxyCart->listCustomers($params);
     }
 
     public function getCustomer($id)
