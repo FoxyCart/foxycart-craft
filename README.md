@@ -6,7 +6,7 @@ This plugin adds in a number of FoxyCart features to Craft to make it easier for
 
  - Webhooks
  - SSO
- - HMAC add to cart encryption
+ - HMAC add to cart link/form validation
  - FoxyCart category field
  - Basic transaction reports
 
@@ -28,7 +28,7 @@ For an overview of integrating FoxyCart into Craft utilising this plugin, see [C
 
 ### HMAC
 
-To enable HMAC encryption, simply wrap any links or forms (or your whole page if desired) in `{% hmac %}` and `{% endhmac %}` tags. Note that the add to cart requires a code. For more information see [this page](http://wiki.foxycart.com/static/redirect/price_validation "FoxyCart wiki on HMAC encryption")
+To enable HMAC validation, simply wrap any links or forms (or your whole page if desired) in `{% hmac %}` and `{% endhmac %}` tags. Note that the add to cart requires a code. For more information see [this page](http://wiki.foxycart.com/static/redirect/price_validation "FoxyCart wiki on link/form validation")
 
 ### Events
 
