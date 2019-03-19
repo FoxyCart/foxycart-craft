@@ -43,10 +43,10 @@
 	{% else %}
 		{% for customer in customers %}
 			<tr>
-				<td><a href="{{ url('foxycart/customer/'~customer.customer_id) }}">{{ customer.customer_first_name }} {{ customer.customer_last_name }}</a></td>
+				<td><a href="{{ url('foxycart/customer/'~customer.customer_id) }}">{% if customer.customer_first_name %}{{ customer.customer_first_name }}{% endif %} {% if customer.customer_last_name %}{{ customer.customer_last_name }}{% endif %}</a></td>
 				<td>{{ customer.customer_email }}</td>
-				<td>{{ customer.customer_country }}</td>
-				<td>{{ customer.customer_postal_code }}</td>
+				<td>{% if customer.customer_country %}{{ customer.customer_country }}{% endif %}</td>
+				<td>{% if customer.customer_postal_code %}{{ customer.customer_postal_code }}{% endif %}</td>
 			</tr>
 		{% endfor %}
 	{% endif %}

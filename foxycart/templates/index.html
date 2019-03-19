@@ -48,7 +48,7 @@
 			{% for transaction in transactions %}
 				<tr>
 					<td><a target="_blank" href="{{ transaction.receipt_url }}" class="go" title="{{ "View receipt"|t }}">{{ transaction.id }}</a></td>
-					<td>{% if transaction.is_anonymous == "0" %}<a target="_blank" href="{{ url('foxycart/customer/'~transaction.customer_id) }}" title="{{ "View Customer"|t }}">{% endif %}{{ transaction.customer_first_name }} {{ transaction.customer_last_name }}{% if transaction.is_anonymous == "0" %}</a>{% endif %}</td>
+					<td>{% if transaction.is_anonymous == "0" %}<a target="_blank" href="{{ url('foxycart/customer/'~transaction.customer_id) }}" title="{{ "View Customer"|t }}">{% endif %}{% if transaction.customer_first_name %}{{ transaction.customer_first_name }}{% endif %} {% if transaction.customer_last_name %}{{ transaction.customer_last_name }}{% endif %}{% if transaction.is_anonymous == "0" %}</a>{% endif %}</td>
 					<td>{{ transaction.customer_email }}</td>
 					<td>{{ transaction.order_total|currency('$') }}</td>
 					<td>{{ transaction.transaction_date|datetime }}</td>
